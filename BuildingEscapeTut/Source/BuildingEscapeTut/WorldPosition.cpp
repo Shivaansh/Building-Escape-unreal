@@ -18,8 +18,16 @@ UWorldPosition::UWorldPosition()
 void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
+	FString objectName = GetOwner()->GetName();
+	FString* objectNamePtr = &objectName;
+
+	// UE_LOG(LogTemp, Warning, TEXT("%s"), **objectNamePtr);
+
+	FString objectPosition = GetOwner()->GetActorLocation().ToString();
+	FString* objectPosString = &objectPosition;
+
+	// UE_LOG(LogTemp, Warning, TEXT("Object position is %s"), **objectPosString);
 	
 }
 

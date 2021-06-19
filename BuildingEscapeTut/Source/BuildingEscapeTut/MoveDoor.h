@@ -2,21 +2,25 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h"
-#include "Math/Vector.h"
+#include "GameFramework/Actor.h" //needed for GetObject() method
 #include "CoreMinimal.h"
+#include "Math/Rotator.h"
+#include "Math/UnrealMathUtility.h" 	
 #include "Components/ActorComponent.h"
-#include "WorldPosition.generated.h"
+#include "MoveDoor.generated.h"
+
+
+// Add members, member variables and functions here
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BUILDINGESCAPETUT_API UWorldPosition : public UActorComponent
+class BUILDINGESCAPETUT_API UMoveDoor : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UWorldPosition();
+	UMoveDoor();
 
 protected:
 	// Called when the game starts
@@ -25,6 +29,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	float doorOpenRotation = 90.0f;
+	float currentRotation;
+	float initialRotation;
+	float targetRotation;
 
 		
 };
