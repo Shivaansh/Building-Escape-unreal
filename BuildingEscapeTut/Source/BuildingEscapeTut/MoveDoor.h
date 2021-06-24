@@ -7,6 +7,7 @@
 #include "Math/Rotator.h"
 #include "Math/UnrealMathUtility.h" 	
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerVolume.h"
 #include "MoveDoor.generated.h"
 
 
@@ -21,6 +22,7 @@ class BUILDINGESCAPETUT_API UMoveDoor : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UMoveDoor();
+	void OpenDoor(float DeltaTime);
 
 protected:
 	// Called when the game starts
@@ -34,7 +36,10 @@ private:
 	float doorOpenRotation = 90.0f;
 	float currentRotation;
 	float initialRotation;
-	float targetRotation;
+	UPROPERTY(EditAnywhere)	float targetRotation;
+	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate;
+	UPROPERTY(EditAnywhere) AActor* DoorOpener;
+	
 
 		
 };

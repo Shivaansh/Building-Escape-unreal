@@ -21,7 +21,7 @@ void UMoveDoor::BeginPlay()
 
 	currentRotation = GetOwner()->GetActorRotation().Yaw;
 	initialRotation = currentRotation;
-	targetRotation = currentRotation + doorOpenRotation;
+	targetRotation = initialRotation + doorOpenRotation;
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform before rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 
 }
@@ -31,13 +31,20 @@ void UMoveDoor::BeginPlay()
 void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	//TODO: Add statement to check for override with the trigger volume
+	if(PressurePlate->IsOverlappingActor(DoorOpener)){
+		OpenDoor(DeltaTime);
+	}
+	
+	
+}
 
+void UMoveDoor::OpenDoor(float DeltaTime){
 	// ...
-	currentRotation = FMath::FInterpTo(currentRotation, targetRotation, DeltaTime, 1);
+	currentRotation = FMath::FInterpTo(currentRotation, targetRotation, DeltaTime, DeltaTime*60);
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenOutwardsRotation);
 
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 }
-
