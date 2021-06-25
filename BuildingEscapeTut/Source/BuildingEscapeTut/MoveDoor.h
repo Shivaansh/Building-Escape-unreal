@@ -8,6 +8,8 @@
 #include "Math/UnrealMathUtility.h" 	
 #include "Components/ActorComponent.h"
 #include "Engine/TriggerVolume.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 #include "MoveDoor.generated.h"
 
 
@@ -23,6 +25,7 @@ public:
 	// Sets default values for this component's properties
 	UMoveDoor();
 	void OpenDoor(float DeltaTime);
+	void CloseDoor(float DeltaTime);
 
 protected:
 	// Called when the game starts
@@ -33,6 +36,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	int doorSpeed = 70;
 	float doorOpenRotation = 90.0f;
 	float currentRotation;
 	float initialRotation;

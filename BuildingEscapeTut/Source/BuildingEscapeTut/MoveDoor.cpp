@@ -23,6 +23,7 @@ void UMoveDoor::BeginPlay()
 	initialRotation = currentRotation;
 	targetRotation = initialRotation + doorOpenRotation;
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform before rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
+	DoorOpener = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 }
 
@@ -31,8 +32,13 @@ void UMoveDoor::BeginPlay()
 void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(PressurePlate && DoorOpener && PressurePlate->IsOverlappingActor(DoorOpener)){
-		OpenDoor(DeltaTime);
+	if(PressurePlate && DoorOpener){
+		if(PressurePlate->IsOverlappingActor(DoorOpener)){
+			OpenDoor(DeltaTime);
+		}else{
+			CloseDoor(DeltaTime);
+		}
+		
 	}
 	if(!DoorOpener){
 		UE_LOG(LogTemp, Error, TEXT("NO DoorOpener assigned!"));
@@ -45,10 +51,20 @@ void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 void UMoveDoor::OpenDoor(float DeltaTime){
 	// ...
-	currentRotation = FMath::FInterpTo(currentRotation, targetRotation, DeltaTime, DeltaTime*60);
+	currentRotation = FMath::FInterpTo(currentRotation, targetRotation, DeltaTime, DeltaTime*doorSpeed);
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenOutwardsRotation);
+
+	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
+}
+
+void UMoveDoor::CloseDoor(float DeltaTime){
+	// ...
+	currentRotation = FMath::FInterpTo(currentRotation, initialRotation, DeltaTime, DeltaTime*doorSpeed);
+	FRotator OpenInwardsRotation = FRotator();
+	OpenInwardsRotation.Yaw = currentRotation;
+	GetOwner()->SetActorRotation(OpenInwardsRotation);
 
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 }
