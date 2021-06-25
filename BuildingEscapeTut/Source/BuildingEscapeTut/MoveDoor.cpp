@@ -31,12 +31,16 @@ void UMoveDoor::BeginPlay()
 void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	//TODO: Add statement to check for override with the trigger volume
-	if(PressurePlate->IsOverlappingActor(DoorOpener)){
+	if(PressurePlate && DoorOpener && PressurePlate->IsOverlappingActor(DoorOpener)){
 		OpenDoor(DeltaTime);
 	}
-	
-	
+	if(!DoorOpener){
+		UE_LOG(LogTemp, Error, TEXT("NO DoorOpener assigned!"));
+	}
+	if(!PressurePlate){
+		UE_LOG(LogTemp, Error, TEXT("NO PressurePlate assigned!"));
+	}
+	//TODO: Try using actor's name for better logging
 }
 
 void UMoveDoor::OpenDoor(float DeltaTime){
