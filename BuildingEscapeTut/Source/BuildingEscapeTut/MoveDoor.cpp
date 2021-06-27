@@ -24,7 +24,6 @@ void UMoveDoor::BeginPlay()
 	targetRotation = initialRotation + doorOpenRotation;
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform before rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 	DoorOpener = GetWorld()->GetFirstPlayerController()->GetPawn();
-
 }
 
 
@@ -34,9 +33,14 @@ void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if(PressurePlate && DoorOpener){
 		if(PressurePlate->IsOverlappingActor(DoorOpener)){
-			OpenDoor(DeltaTime);
+			if((GetWorld()->GetTimeSeconds() - doorLastOpened) > doorCloseDelay){
+				CloseDoor(DeltaTime);
+			}
+			
 		}else{
-			CloseDoor(DeltaTime);
+			OpenDoor(DeltaTime);
+			doorLastOpened = GetWorld()->GetTimeSeconds();
+			// UE_LOG(LogTemp, Error, TEXT("Time last opened: %f"), doorLastOpened);
 		}
 		
 	}
