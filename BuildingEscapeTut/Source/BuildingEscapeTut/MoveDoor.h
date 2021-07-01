@@ -36,13 +36,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	int doorSpeed = 75;
-	float doorOpenRotation = 90.0f;
+	
+	float doorRotation = 90.0f;
 	float doorLastOpened;
-	float doorCloseDelay = 0.8f;
 	float currentRotation;
 	float initialRotation;
-	
+
+	UPROPERTY(EditAnywhere)	int doorSpeed = 75;
+	UPROPERTY(EditAnywhere)	float doorCloseDelay = 0.8f;
 	UPROPERTY(EditAnywhere)	float targetRotation;
 	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate;
 	UPROPERTY(EditAnywhere) AActor* DoorOpener;

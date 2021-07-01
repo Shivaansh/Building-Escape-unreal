@@ -21,7 +21,7 @@ void UMoveDoor::BeginPlay()
 
 	currentRotation = GetOwner()->GetActorRotation().Yaw;
 	initialRotation = currentRotation;
-	targetRotation = initialRotation + doorOpenRotation;
+	targetRotation = initialRotation + doorRotation;
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform before rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 	DoorOpener = GetWorld()->GetFirstPlayerController()->GetPawn();
 }
@@ -40,7 +40,6 @@ void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		}else{
 			OpenDoor(DeltaTime);
 			doorLastOpened = GetWorld()->GetTimeSeconds();
-			// UE_LOG(LogTemp, Error, TEXT("Time last opened: %f"), doorLastOpened);
 		}
 		
 	}
@@ -50,11 +49,9 @@ void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if(!PressurePlate){
 		UE_LOG(LogTemp, Error, TEXT("NO PressurePlate assigned!"));
 	}
-	//TODO: Try using actor's name for better logging
 }
 
 void UMoveDoor::OpenDoor(float DeltaTime){
-	// ...
 	currentRotation = FMath::FInterpTo(currentRotation, targetRotation, DeltaTime, DeltaTime*doorSpeed);
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
@@ -64,11 +61,10 @@ void UMoveDoor::OpenDoor(float DeltaTime){
 }
 
 void UMoveDoor::CloseDoor(float DeltaTime){
-	// ...
 	currentRotation = FMath::FInterpTo(currentRotation, initialRotation, DeltaTime, DeltaTime*doorSpeed);
 	FRotator OpenInwardsRotation = FRotator();
 	OpenInwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenInwardsRotation);
-
+	
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 }
