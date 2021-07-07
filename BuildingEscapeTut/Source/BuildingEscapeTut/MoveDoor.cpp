@@ -56,8 +56,6 @@ void UMoveDoor::OpenDoor(float DeltaTime){
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenOutwardsRotation);
-
-	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 }
 
 void UMoveDoor::CloseDoor(float DeltaTime){
@@ -65,6 +63,4 @@ void UMoveDoor::CloseDoor(float DeltaTime){
 	FRotator OpenInwardsRotation = FRotator();
 	OpenInwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenInwardsRotation);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform after rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 }
