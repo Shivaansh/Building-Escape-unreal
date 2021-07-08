@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Grabber.h"
+#include "GameFramework/PlayerController.h"
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -29,7 +29,12 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
 
+	UE_LOG(LogTemp, Warning, TEXT("Player View Point Location: %s \n Player View Point Rotation: %s "), 
+	*PlayerViewPointLocation.ToString(),
+	*PlayerViewPointRotation.ToString());
 	// ...
 }
 

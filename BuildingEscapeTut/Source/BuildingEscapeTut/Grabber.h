@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Engine/World.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
@@ -24,5 +25,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	FVector PlayerViewPointLocation;
+  	FRotator PlayerViewPointRotation;
 };
