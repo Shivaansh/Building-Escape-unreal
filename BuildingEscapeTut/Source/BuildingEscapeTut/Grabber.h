@@ -28,4 +28,5 @@ public:
 private:
 	FVector PlayerViewPointLocation;
   	FRotator PlayerViewPointRotation;
+	float Reach = 100.0f;
 };
