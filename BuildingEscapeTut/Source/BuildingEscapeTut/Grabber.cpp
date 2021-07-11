@@ -3,6 +3,7 @@
 #include "Grabber.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/Actor.h"
 
 #define OUT
 // Sets default values for this component's properties
@@ -55,10 +56,18 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), 
 		CollisionQueryParams);
 
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+
 	AActor* ActorHit = HitResult.GetActor();
+
+	if(PhysicsHandle){
+		UE_LOG(LogTemp, Warning, TEXT("Found Physics Handle component %s"), *(PhysicsHandle->GetName()));
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("No physics handle found!"));
+	}
 	
 	if(ActorHit){
-		UE_LOG(LogTemp, Error, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
+		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
 	}else{
 		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
 	}
