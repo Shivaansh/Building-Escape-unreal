@@ -24,7 +24,20 @@ void UGrabber::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("Grabber available"));
 
 	// ...
-	
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if(PhysicsHandle){
+		UE_LOG(LogTemp, Warning, TEXT("Found Physics Handle component %s"), *(PhysicsHandle->GetName()));
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("No physics handle found!"));
+	}
+
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if(InputComponent){
+		UE_LOG(LogTemp, Warning, TEXT("Found Input Component %s"), *(InputComponent->GetName()));
+		// InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("No Input Component found!"));
+	}
 }
 
 void UGrabber::Grab(){
@@ -37,15 +50,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	// ..
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-
-	// UE_LOG(LogTemp, Warning, TEXT("Player View Point Location: %s \n Player View Point Rotation: %s "), 
-	// *PlayerViewPointLocation.ToString(),
-	// *PlayerViewPointRotation.ToString());
-	// ...
-
 	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
-
 	DrawDebugLine(GetWorld(), PlayerViewPointLocation, LineTraceEnd, FColor(255, 0, 0), false, 0.0f, 0, 0.5f);
 
 	//Struct, not a variable
@@ -59,28 +66,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), 
 		CollisionQueryParams);
 
-
 	AActor* ActorHit = HitResult.GetActor();
-	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-
 	if(ActorHit){
 		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
 	}else{
 		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
-	}
-
-	if(PhysicsHandle){
-		UE_LOG(LogTemp, Warning, TEXT("Found Physics Handle component %s"), *(PhysicsHandle->GetName()));
-	}else{
-		UE_LOG(LogTemp, Error, TEXT("No physics handle found!"));
-	}
-	
-	if(InputComponent){
-		UE_LOG(LogTemp, Warning, TEXT("Found Input Component %s"), *(InputComponent->GetName()));
-		// InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-	}else{
-		UE_LOG(LogTemp, Error, TEXT("No Input Component found!"));
 	}
 }
 
