@@ -27,6 +27,10 @@ void UGrabber::BeginPlay()
 	
 }
 
+void UGrabber::Grab(){
+	UE_LOG(LogTemp, Warning, TEXT("Grab method working"));
+}
+
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -48,7 +52,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	//Reference: https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/FCollisionQueryParams/
 	FCollisionQueryParams CollisionQueryParams(FName(TEXT("")), false, GetOwner());
 	FHitResult HitResult;
-
 	GetWorld()->LineTraceSingleByObjectType(
 		OUT HitResult,
 		PlayerViewPointLocation, 
@@ -56,9 +59,16 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), 
 		CollisionQueryParams);
 
+
+	AActor* ActorHit = HitResult.GetActor();
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-	AActor* ActorHit = HitResult.GetActor();
+
+	if(ActorHit){
+		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
+	}
 
 	if(PhysicsHandle){
 		UE_LOG(LogTemp, Warning, TEXT("Found Physics Handle component %s"), *(PhysicsHandle->GetName()));
@@ -66,18 +76,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		UE_LOG(LogTemp, Error, TEXT("No physics handle found!"));
 	}
 	
-	if(ActorHit){
-		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
-	}else{
-		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
-	}
-
 	if(InputComponent){
 		UE_LOG(LogTemp, Warning, TEXT("Found Input Component %s"), *(InputComponent->GetName()));
 		// InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 	}else{
 		UE_LOG(LogTemp, Error, TEXT("No Input Component found!"));
 	}
-	
 }
 
