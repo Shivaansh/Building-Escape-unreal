@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Engine/World.h"
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+// #include "Components/InputComponent.h"
+#include "CoreMinimal.h"
+#include "Engine/World.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
@@ -31,4 +32,7 @@ private:
   	FRotator PlayerViewPointRotation;
 	float Reach = 100.0f;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+    UInputComponent* InputComponent = nullptr;
+
+	// void Grab();
 };

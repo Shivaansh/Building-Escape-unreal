@@ -57,7 +57,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CollisionQueryParams);
 
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
 	AActor* ActorHit = HitResult.GetActor();
 
 	if(PhysicsHandle){
@@ -70,6 +70,13 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
 	}else{
 		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
+	}
+
+	if(InputComponent){
+		UE_LOG(LogTemp, Warning, TEXT("Found Input Component %s"), *(InputComponent->GetName()));
+		// InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("No Input Component found!"));
 	}
 	
 }
