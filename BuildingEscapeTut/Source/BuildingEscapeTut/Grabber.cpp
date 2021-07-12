@@ -33,25 +33,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Determining maximum raytrace depth
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
-
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionQueryParams(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult,
-		PlayerViewPointLocation,
-		LineTraceEnd,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-		CollisionQueryParams);
-
-	AActor *ActorHit = HitResult.GetActor();
-	if (ActorHit){
-		UE_LOG(LogTemp, Warning, TEXT("Raycast Hit %s"), *(ActorHit->GetName()));
-	}
-	else{
-		UE_LOG(LogTemp, Error, TEXT("Raycast Hit nothing!"));
-	}
 }
 
 // // Identify and log out the name of the object hit by the raycast
@@ -72,20 +53,13 @@ void UGrabber::SetupInputComponent(){
 	}
 }
 
-// void UGrabber::PerformRaycast(FVector lineTraceEnd, FHitResult *hitResult){
-// 	// 	//Struct, not a variable
-// 	// 	//Reference: https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/FCollisionQueryParams/
-// }
-
 // Find the PhysicsHandle instance attached to the Actor/Player
 void UGrabber::SetupPhysicsHandle(){
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle)
-	{
+	if (PhysicsHandle){
 		UE_LOG(LogTemp, Warning, TEXT("Found Physics Handle component %s"), *(PhysicsHandle->GetName()));
 	}
-	else
-	{
+	else{
 		UE_LOG(LogTemp, Error, TEXT("No physics handle found!"));
 	}
 }
@@ -93,14 +67,52 @@ void UGrabber::SetupPhysicsHandle(){
 void UGrabber::Grab(){
 	UE_LOG(LogTemp, Warning, TEXT("Grab method working"));
 	//TODO: Add grab functionality here
-
 	/*
 	This takes most functionality, as we don't want to be performing raycasts all the time.
 	Rather, only when we want to pick something up.
 	*/
+	GetFirstPhysicsBodyInReach();
+
 }
 
 void UGrabber::Release(){
 	UE_LOG(LogTemp, Warning, TEXT("Release method working"));
 	//TODO: Add release functionality here
+}
+
+FHitResult UGrabber::GetFirstPhysicsBodyInReach() const{
+
+	// Get players viewpoint
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	// Ray-cast out to a certain distance (Reach)
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+
+	FHitResult HitResult;
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT HitResult,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+
+	// See what it hits
+	AActor* ActorHit = HitResult.GetActor();
+
+	if (ActorHit){
+		UE_LOG(LogTemp, Warning, TEXT("Line trace has hit: %s"), *(ActorHit->GetName()));
+	}else{
+		UE_LOG(LogTemp, Warning, TEXT("Line trace has hit nothing!"));
+	}
+
+	return HitResult;
 }

@@ -27,8 +27,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	FRotator PlayerViewPointRotation;
-	FVector PlayerViewPointLocation;
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
     UInputComponent* InputComponent = nullptr;
 	
@@ -38,4 +36,5 @@ private:
 	void Release();
 	void SetupInputComponent();
 	void SetupPhysicsHandle();
+	FHitResult GetFirstPhysicsBodyInReach() const;
 };
