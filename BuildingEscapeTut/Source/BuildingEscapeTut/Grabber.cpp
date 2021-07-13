@@ -33,6 +33,21 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Determining maximum raytrace depth
+	if(PhysicsHandle->GetGrabbedComponent()){
+		// ROUGH, TO BE REFACTORED
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	// Ray-cast out to a certain distance (Reach)
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+
+	PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
 }
 
 // // Identify and log out the name of the object hit by the raycast
@@ -45,7 +60,7 @@ void UGrabber::SetupInputComponent(){
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found Input Component %s"), *(InputComponent->GetName()));
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+		InputComponent->BindAction("Release", IE_Pressed, this, &UGrabber::Release);
 	}
 	else
 	{
@@ -71,13 +86,33 @@ void UGrabber::Grab(){
 	This takes most functionality, as we don't want to be performing raycasts all the time.
 	Rather, only when we want to pick something up.
 	*/
-	GetFirstPhysicsBodyInReach();
 
+	// ROUGH, TO BE REFACTORED
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	// Ray-cast out to a certain distance (Reach)
+	FVector LineTraceEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * Reach;
+
+	FHitResult TargetObject = GetFirstPhysicsBodyInReach();
+	UPrimitiveComponent* ComponentToGrab = TargetObject.GetComponent();
+
+	if(TargetObject.GetActor()){
+		PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, NAME_None, LineTraceEnd);
+	}
 }
 
 void UGrabber::Release(){
 	UE_LOG(LogTemp, Warning, TEXT("Release method working"));
 	//TODO: Add release functionality here
+	if(PhysicsHandle->GetGrabbedComponent()){
+		PhysicsHandle->ReleaseComponent();
+	}
 }
 
 FHitResult UGrabber::GetFirstPhysicsBodyInReach() const{
