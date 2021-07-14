@@ -7,9 +7,11 @@
 #include "Math/Rotator.h"
 #include "Math/UnrealMathUtility.h" 	
 #include "Components/ActorComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/TriggerVolume.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "Containers/Array.h"
 #include "MoveDoor.generated.h"
 
 
@@ -34,6 +36,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	float TotalMass() const;
 
 private:
 	
@@ -45,9 +48,8 @@ private:
 	UPROPERTY(EditAnywhere)	int doorSpeed = 75;
 	UPROPERTY(EditAnywhere)	float doorCloseDelay = 0.8f;
 	UPROPERTY(EditAnywhere)	float targetRotation;
+	UPROPERTY(EditAnywhere)	float plateMass = 15.0f;
 	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate;
 	UPROPERTY(EditAnywhere) AActor* DoorOpener;
-	
-
 		
 };

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "MoveDoor.h"
+
+#define OUT
 
 // Sets default values for this component's properties
 UMoveDoor::UMoveDoor()
@@ -31,15 +31,13 @@ void UMoveDoor::BeginPlay()
 void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if(PressurePlate && DoorOpener){
-		if(PressurePlate->IsOverlappingActor(DoorOpener)){
-			if((GetWorld()->GetTimeSeconds() - doorLastOpened) > doorCloseDelay){
-				CloseDoor(DeltaTime);
-			}
-			
-		}else{
+	float MassOfObjects = TotalMass();
+	if(PressurePlate){
+		if(MassOfObjects > plateMass){
 			OpenDoor(DeltaTime);
-			doorLastOpened = GetWorld()->GetTimeSeconds();
+			// doorLastOpened = GetWorld()->GetTimeSeconds();	
+		}else{
+			CloseDoor(DeltaTime);
 		}
 		
 	}
@@ -63,4 +61,19 @@ void UMoveDoor::CloseDoor(float DeltaTime){
 	FRotator OpenInwardsRotation = FRotator();
 	OpenInwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenInwardsRotation);
+}
+
+float UMoveDoor::TotalMass() const{
+	
+	OUT float mass = 0.0f;
+	
+	TArray<AActor*> OverlappingObjects;
+	PressurePlate->GetOverlappingActors(OverlappingObjects);
+
+	for(AActor* Actor : OverlappingObjects){
+		mass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Mass is %f"), mass);
+	return mass;
+
 }
