@@ -30,11 +30,12 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
     UInputComponent* InputComponent = nullptr;
 	
-	UPROPERTY(EditAnywhere) float Reach = 100.0f;
+	UPROPERTY(EditAnywhere) float Reach = 250.0f;
 	
 	void Grab();
 	void Release();
 	void SetupInputComponent();
 	void SetupPhysicsHandle();
 	FHitResult GetFirstPhysicsBodyInReach() const;
+	FVector GetLineTraceEnd() const;
 };
