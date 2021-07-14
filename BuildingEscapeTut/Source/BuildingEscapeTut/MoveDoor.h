@@ -47,6 +47,9 @@ private:
 	float currentRotation;
 	float initialRotation;
 
+	bool OpenDoorSound = false;
+	bool CloseDoorSound = false;
+
 	UPROPERTY(EditAnywhere)	int doorSpeed = 75;
 	UPROPERTY(EditAnywhere)	float doorCloseDelay = 0.8f;
 	UPROPERTY(EditAnywhere)	float targetRotation;

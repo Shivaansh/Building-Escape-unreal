@@ -29,6 +29,8 @@ void UMoveDoor::BeginPlay()
 	}else{
 		UE_LOG(LogTemp, Error, TEXT("AUDIO COMPONENT FOUND: %s"), *(AudioPlayer->GetName()));
 	}
+
+	OpenDoorSound = true;
 }
 
 
@@ -60,9 +62,11 @@ void UMoveDoor::OpenDoor(float DeltaTime){
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenOutwardsRotation);
-	if(AudioPlayer){
-		UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO"));
-		AudioPlayer->Play();
+	if(AudioPlayer && OpenDoorSound){
+			UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO - OPEN"));
+			OpenDoorSound = false;
+			AudioPlayer->Play();
+			CloseDoorSound= true;
 	}
 	
 }
@@ -72,9 +76,11 @@ void UMoveDoor::CloseDoor(float DeltaTime){
 	FRotator OpenInwardsRotation = FRotator();
 	OpenInwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenInwardsRotation);
-	if(AudioPlayer){
-		UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO"));
-		AudioPlayer->Play();
+	if(AudioPlayer && CloseDoorSound){
+			UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO - OPEN"));
+			CloseDoorSound = false;
+			AudioPlayer->Play();
+			OpenDoorSound= true;
 	}
 }
 
