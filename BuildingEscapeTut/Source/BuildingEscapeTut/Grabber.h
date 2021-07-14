@@ -38,4 +38,6 @@ private:
 	void SetupPhysicsHandle();
 	FHitResult GetFirstPhysicsBodyInReach() const;
 	FVector GetRayTraceEnd() const;
+	FVector GetPlayerViewPointLocation() const;
+	FRotator GetPlayerViewPointRotation() const;
 };
