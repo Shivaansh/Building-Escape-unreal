@@ -29,7 +29,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Determining maximum raytrace depth
-	if(!PhysicsHandle){return};
+	if(!PhysicsHandle){return;}
 	if (PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector PhysicsObjectLocation = GetRayTraceEnd();
@@ -67,7 +67,7 @@ void UGrabber::Grab(){
 }
 
 void UGrabber::Release(){
-	if(!PhysicsHandle){return};
+	if(!PhysicsHandle){return;}
 	if (PhysicsHandle->GetGrabbedComponent()){
 		PhysicsHandle->ReleaseComponent();
 	}

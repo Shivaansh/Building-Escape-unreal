@@ -2,17 +2,19 @@
 
 #pragma once
 
-#include "GameFramework/Actor.h" //needed for GetObject() method
+#include "Components/ActorComponent.h"
+#include "Components/AudioComponent.h"
+#include "Components/PrimitiveComponent.h"
+#include "Containers/Array.h"
 #include "CoreMinimal.h"
+#include "Engine/World.h"
+#include "Engine/TriggerVolume.h"
+#include "GameFramework/Actor.h" //needed for GetObject() method
+#include "GameFramework/PlayerController.h"
 #include "Math/Rotator.h"
 #include "Math/UnrealMathUtility.h" 	
-#include "Components/ActorComponent.h"
-#include "Components/PrimitiveComponent.h"
-#include "Engine/TriggerVolume.h"
-#include "Engine/World.h"
-#include "GameFramework/PlayerController.h"
-#include "Containers/Array.h"
 #include "MoveDoor.generated.h"
+
 
 
 // Add members, member variables and functions here
@@ -51,5 +53,6 @@ private:
 	UPROPERTY(EditAnywhere)	float plateMass = 15.0f;
 	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate = nullptr;
 	UPROPERTY(EditAnywhere) AActor* DoorOpener = nullptr;
+	UPROPERTY(EditAnywhere) UAudioComponent* AudioPlayer = nullptr;
 		
 };

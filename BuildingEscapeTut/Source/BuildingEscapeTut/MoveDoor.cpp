@@ -23,6 +23,12 @@ void UMoveDoor::BeginPlay()
 	targetRotation = initialRotation + doorRotation;
 	UE_LOG(LogTemp, Warning, TEXT("Object yaw transform before rotating is %f"), (GetOwner()->GetActorRotation()).Yaw);
 	DoorOpener = GetWorld()->GetFirstPlayerController()->GetPawn();
+	AudioPlayer = GetOwner()->FindComponentByClass<UAudioComponent>();
+	if(!AudioPlayer){
+		UE_LOG(LogTemp, Error, TEXT("NO AUDIO COMPONENT FOUND!"));
+	}else{
+		UE_LOG(LogTemp, Error, TEXT("AUDIO COMPONENT FOUND: %s"), *(AudioPlayer->GetName()));
+	}
 }
 
 
@@ -54,6 +60,11 @@ void UMoveDoor::OpenDoor(float DeltaTime){
 	FRotator OpenOutwardsRotation = FRotator();
 	OpenOutwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenOutwardsRotation);
+	if(AudioPlayer){
+		UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO"));
+		AudioPlayer->Play();
+	}
+	
 }
 
 void UMoveDoor::CloseDoor(float DeltaTime){
@@ -61,6 +72,10 @@ void UMoveDoor::CloseDoor(float DeltaTime){
 	FRotator OpenInwardsRotation = FRotator();
 	OpenInwardsRotation.Yaw = currentRotation;
 	GetOwner()->SetActorRotation(OpenInwardsRotation);
+	if(AudioPlayer){
+		UE_LOG(LogTemp, Warning, TEXT("PLAYING AUDIO"));
+		AudioPlayer->Play();
+	}
 }
 
 float UMoveDoor::TotalMass() const{
