@@ -9,7 +9,6 @@ UMoveDoor::UMoveDoor()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 	// ...
 }
 
@@ -31,6 +30,14 @@ void UMoveDoor::BeginPlay()
 void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if(!DoorOpener){
+		UE_LOG(LogTemp, Error, TEXT("NO DoorOpener assigned!"));
+		return;
+	}
+	if(!PressurePlate){
+		UE_LOG(LogTemp, Error, TEXT("NO PressurePlate assigned!"));
+		return;
+	}
 	float MassOfObjects = TotalMass();
 	if(PressurePlate){
 		if(MassOfObjects > plateMass){
@@ -39,13 +46,6 @@ void UMoveDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		}else{
 			CloseDoor(DeltaTime);
 		}
-		
-	}
-	if(!DoorOpener){
-		UE_LOG(LogTemp, Error, TEXT("NO DoorOpener assigned!"));
-	}
-	if(!PressurePlate){
-		UE_LOG(LogTemp, Error, TEXT("NO PressurePlate assigned!"));
 	}
 }
 
@@ -69,7 +69,10 @@ float UMoveDoor::TotalMass() const{
 	
 	TArray<AActor*> OverlappingObjects;
 	PressurePlate->GetOverlappingActors(OverlappingObjects);
-
+	if(!PressurePlate){
+		UE_LOG(LogTemp, Error, TEXT("NO PressurePlate assigned!"));
+		return 0.0f;
+	}
 	for(AActor* Actor : OverlappingObjects){
 		mass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 	}

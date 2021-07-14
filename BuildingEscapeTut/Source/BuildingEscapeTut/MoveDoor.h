@@ -49,7 +49,7 @@ private:
 	UPROPERTY(EditAnywhere)	float doorCloseDelay = 0.8f;
 	UPROPERTY(EditAnywhere)	float targetRotation;
 	UPROPERTY(EditAnywhere)	float plateMass = 15.0f;
-	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate;
-	UPROPERTY(EditAnywhere) AActor* DoorOpener;
+	UPROPERTY(EditAnywhere) ATriggerVolume* PressurePlate = nullptr;
+	UPROPERTY(EditAnywhere) AActor* DoorOpener = nullptr;
 		
 };
